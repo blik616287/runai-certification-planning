@@ -1,0 +1,13 @@
+# Secrets & environment-specific — never commit
+config/vars.env
+kubeconfig
+*.kubeconfig
+results/
+evidence/capture-*/
+
+# The exported profiles/values/manifests contain LIVE SECRETS
+# (CA private key, JFrog JWT, DB/console/NATS passwords) — excluded from git.
+artifacts/
+
+# scratch
+.print-tmp.html

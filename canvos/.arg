@@ -1,0 +1,25 @@
+# CanvOS build arguments — Run:ai certification (Palette Edge)
+# Repo: https://github.com/spectrocloud/CanvOS
+# Produces the Kairos immutable OS + RKE2 provider image that becomes the
+# `edge-native-byoi` OS layer under test.
+#
+# NOTE on K8s version: CanvOS builds provider images per supported K8s version
+# of the chosen distribution. The certified build is RKE2 1.34.9 — select the
+# 1.34.9 provider image at profile time and ensure it matches the `edge-rke2`
+# pack tag (see ../artifacts + ../RunAI-Certification-Plan.md §2).
+
+CUSTOM_TAG=runai-cert
+IMAGE_REGISTRY=<your-registry>            # e.g. ttl.sh/<uuid> or your governed registry
+IMAGE_REPO=palette-edge-runai
+OS_DISTRIBUTION=ubuntu
+OS_VERSION=22.04
+K8S_DISTRIBUTION=rke2                      # LOCKED — the distribution being certified
+ARCH=amd64                                # LOCKED — amd64 cert kit
+ISO_NAME=palette-edge-runai-installer
+
+# Optional / environment
+HTTP_PROXY=
+HTTPS_PROXY=
+NO_PROXY=
+PROXY_CERT_PATH=
+UPDATE_KERNEL=false

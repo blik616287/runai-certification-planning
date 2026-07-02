@@ -1,0 +1,21 @@
+# Patched KnativeServing CR — Serving pinned to 1.18 (Run:ai 2.23 supports 1.11–1.18).
+# Replaces the knative-serving manifest in AI-RA-RunAI-Cluster.
+# Original shipped spec.version "1.20" (out of range). Pair with knative-operator 1.18.1.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: knative-serving
+---
+apiVersion: operator.knative.dev/v1beta1
+kind: KnativeServing
+metadata:
+  name: knative-serving
+  namespace: knative-serving
+spec:
+  version: "1.18"          # WAS "1.20"
+  ingress:
+    kourier:
+      enabled: true
+  config:
+    network:
+      ingress-class: "kourier.ingress.networking.knative.dev"
