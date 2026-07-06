@@ -3,6 +3,28 @@
 Apply these to a **cert-specific copy** of the profiles before publishing the version used for the run.
 Source values/manifests are in `../artifacts/`. Each item cites the file to edit.
 
+## ✅ APPLIED (IN-2350) — cert profiles created via Palette API
+
+Fresh `*-cert` add-on/cluster profiles built from the originals with the edits below baked in
+(the clone endpoint corrupts profile type add-on→cluster, so these were **created fresh** with
+`spec.variables` + `spec.template.type` set explicitly, then published):
+
+| Cert profile | uid | type | edits applied |
+|---|---|---|---|
+| `AI-RA-RunAI-Backend-cert` | `6a4c00a6aab40deb4aa8376a` | add-on | control-plane `ingressClass: nginx` |
+| `AI-RA-RunAI-Cluster-cert` | `6a4c013a00e87db66a206fcf` | add-on | kubeflow **1.9.3**, KnativeServing CR `version: 1.18`, runai-cluster `ingressClass: nginx` |
+| `AI-RA-Infra-Agent-cert` | `6a4c013df803424d22bc5c23` | cluster | `edge-k8s`→**`edge-rke2` 1.34.6**, Cilium `ingressController.default: false` |
+
+**Deviations / still pending:**
+- **Knative:** kept the operator pack at **v1.20.0** but pinned the `KnativeServing` CR to **`version: "1.18"`** — the CR
+  version is what determines the installed Serving version (≤1.18 satisfies Run:ai 2.23), avoiding a risky operator-pack swap.
+  (If you prefer the operator itself at 1.18.1: Dreamworx Helm OCI, packUid `690a37eefd3766a7e11520b7`.)
+- **MPI Operator ≥ 0.6.0:** NOT added — no tenant pack exists; must be imported first (item 6 below).
+- Resolved packUids for reference: kubeflow 1.9.3 `69f7f59062348fa4e56a00ce` (reg `64eaff5630402973c4e1856a`),
+  edge-rke2 1.34.6 `69fe04a62d19ef278eadd9f0` (reg `64eaff453040297344bcad5d`).
+
+---
+
 ---
 
 ## 1. Swap K8s layer to RKE2 1.34.9
