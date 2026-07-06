@@ -1,30 +1,29 @@
-# CanvOS user-data — Kairos cloud-init for the edge host (SKELETON)
-# This registers the built edge host with Palette so it can be assigned to a
-# cluster built from the AI-RA-* profiles. Fill in the tenant registration token.
+# CanvOS user-data — Kairos cloud-init for the edge host (aligned to user-data.template @ PE v4.9.21)
+# Registers the built edge host with Palette so it can be assigned to a cluster from the AI-RA-* profiles.
 # Docs: https://docs.spectrocloud.com/clusters/edge/edge-configuration/installer-reference/
 
 #cloud-config
 stylus:
   site:
-    # Palette edge host registration
+    paletteEndpoint: api.spectrocloud.com          # SaaS default; set your self-hosted endpoint if applicable
     edgeHostToken: "<PALETTE_EDGE_REGISTRATION_TOKEN>"
-    # paletteEndpoint: api.spectrocloud.com          # default SaaS; set for self-hosted
-    # projectUid: 68e6a683b6b66c6045d1b584           # ISC-Strategic-Alliance (optional pin)
+    # projectUid: 68e6a683b6b66c6045d1b584          # ISC-Strategic-Alliance (use projectUid OR projectName)
+    projectName: ISC-Strategic-Alliance
+    tags:
+      purpose: runai-certification
+      k8s: rke2-1.34.6
+    name: runai-cert-edge-01                        # omit to derive from device serial
+    # registrationURL: https://edge-registration-app.vercel.app/   # optional QR registration
+    # network:                                       # optional static net; default is DHCP
+    #   nameserver: 1.1.1.1
 
 install:
   poweroff: false
   reboot: true
 
-# Node users (Kairos). Replace the SSH key; do not ship password auth to prod.
+# Node user (Kairos). Replace the SSH key; avoid password auth for anything beyond a lab.
 users:
   - name: kairos
-    passwd: "<SET_OR_REMOVE>"
     groups: ["admin"]
     ssh_authorized_keys:
       - "<YOUR_SSH_PUBLIC_KEY>"
-
-# Optional static networking / DNS go here per site.
-# stages:
-#   initramfs:
-#     - name: "Set up network"
-#       ...

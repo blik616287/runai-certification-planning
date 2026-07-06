@@ -5,7 +5,7 @@
 **Palette project:** `ISC-Strategic-Alliance` (uid `68e6a683b6b66c6045d1b584`)
 **Owner:** _<fill in>_ · **Target completion:** _<fill in>_ · **Status:** Draft
 
-**Locked decisions:** (1) **Edge** deployment (CanvOS/Kairos, `AI-RA-Infra-Agent`) · (2) **RKE2 1.34.9** K8s engine (`edge-rke2`) — highest supported by Run:ai 2.23, confirmed available · (3) **nginx** ingress (`AI-RA-Core-Nginx`), Cilium ingress demoted · (4) **DRA in scope** (`AI-RA-Core-plus-dra`) · (5) **amd64** cert kit.
+**Locked decisions:** (1) **Edge** deployment (CanvOS/Kairos, `AI-RA-Infra-Agent`) · (2) **RKE2 1.34.6** K8s engine (`edge-rke2`) — highest 1.34.x CanvOS builds, within Run:ai 2.23 · (3) **nginx** ingress (`AI-RA-Core-Nginx`), Cilium ingress demoted · (4) **DRA in scope** (`AI-RA-Core-plus-dra`) · (5) **amd64** cert kit.
 
 ---
 
@@ -23,14 +23,15 @@ This run pins:
 | Axis | Value | Source pack |
 |---|---|---|
 | **Run:ai version** | **2.23.20** | `runai-backend/control-plane`, `runai-cluster` |
-| **Kubernetes version** | **RKE2 1.34.9** (`v1.34.9+rke2rN`) | **`edge-rke2`** ("Palette Optimized RKE2") |
-| **Distribution version** | **CanvOS build `<tag>`** (Kairos + `edge-native-byoi` 2.1.0, engine `rke2` 1.34.9) | CanvOS output |
+| **Kubernetes version** | **RKE2 1.34.6** (`v1.34.6+rke2rN`) | **`edge-rke2`** ("Palette Optimized RKE2") |
+| **Distribution version** | **CanvOS build `<tag>`** (Kairos + `edge-native-byoi` 2.1.0, engine `rke2` 1.34.6) | CanvOS output |
 
 > **RKE2 version note — bounded by Run:ai, not the PDF.** The program doc pins no K8s version, but **Run:ai
 > cluster 2.23 officially supports Kubernetes 1.31–1.34** ([docs](https://run-ai-docs.nvidia.com/self-hosted/2.23/getting-started/installation/install-using-helm/system-requirements)).
-> **1.35.x is out of range** → pinned to **1.34.9** (highest available 1.34.x, confirmed in the `edge-rke2`
-> Palette Registry, uid `64eaff453040297344bcad5d`). CanvOS must bake the matching RKE2 1.34.9 engine. The
-> prior `edge-k8s`/kubeadm 1.34.2 in `AI-RA-Infra-Agent` is **replaced** by `edge-rke2` 1.34.9.
+> **1.35.x is out of range**, and **1.34.9 is not buildable by CanvOS** (public CanvOS PE `v4.9.21`
+> `k8s_version.json` offers rke2 `1.34.2 / 1.34.5 / 1.34.6` in the 1.34 line) → pinned to **1.34.6** (highest
+> 1.34.x CanvOS can build). The `edge-rke2` pack tag and the CanvOS provider-image tag must both be **1.34.6**.
+> The prior `edge-k8s`/kubeadm 1.34.2 in `AI-RA-Infra-Agent` is **replaced** by `edge-rke2` 1.34.6.
 
 > Certification is performed against the **latest Run:ai GA** (issued ~quarterly). Any bump to Run:ai,
 > Kubernetes, or the CanvOS/distro version invalidates this cert and requires a repeat run (see §11).
@@ -40,7 +41,7 @@ This run pins:
 | Component | Version | Pack | Profile |
 |---|---|---|---|
 | Immutable OS (Kairos BYOI) | 2.1.0 | `edge-native-byoi` | AI-RA-Infra-Agent |
-| **Kubernetes (RKE2)** | **1.34.9** | **`edge-rke2`** | AI-RA-Infra-Agent |
+| **Kubernetes (RKE2)** | **1.34.6** | **`edge-rke2`** | AI-RA-Infra-Agent |
 | CNI | Cilium 1.18.4 (**ingressController demoted — not default**) | `cni-cilium-oss` | AI-RA-Infra-Agent |
 | **Ingress** | **ingress-nginx 1.14.3 (default IngressClass `nginx`)** | **`nginx`** | **AI-RA-Core-Nginx** |
 | CSI | Longhorn 1.10.1 | `csi-longhorn` | AI-RA-Infra-Agent |
@@ -58,7 +59,7 @@ This run pins:
 ```
 Phase 0  Access & prerequisites
    │
-Phase 1  Build distribution image  ──►  CanvOS (Kairos + RKE2 1.34.x, K8S_DISTRIBUTION=rke2)
+Phase 1  Build distribution image  ──►  CanvOS (Kairos + RKE2 1.34.6, K8S_DISTRIBUTION=rke2)
    │
 Phase 2  Palette assets           ──►  registries, packs, cluster profiles (+ AI-RA-Core-Nginx)
    │
@@ -97,16 +98,16 @@ Repo: https://github.com/spectrocloud/CanvOS — builds the Kairos-based immutab
 provider artifacts that become the `edge-native-byoi` OS layer under test.
 
 - [ ] Clone CanvOS at a pinned tag; record commit SHA (this is the *distribution version* being certified).
-- [ ] Configure `.arg`:
-  - `OS_DISTRIBUTION` / `OS_VERSION` (Ubuntu base for the Kairos image)
-  - **`K8S_DISTRIBUTION=rke2`** (locked — this is the K8s distro being certified)
-  - **`K8S_VERSION` = RKE2 1.34.9** (highest 1.34.x, confirmed available; Run:ai 2.23 supports ≤ 1.34); **must equal** the `edge-rke2` pack tag in the profile
-  - `ARCH=amd64` (locked); `IMAGE_REGISTRY` / `IMAGE_REPO` / `CUSTOM_TAG`, `PE_VERSION`
-- [ ] Verify CanvOS bakes RKE2 **1.34.9** matching the `edge-rke2` 1.34.9 pack tag. **Do not use 1.35.x** — outside Run:ai 2.23 support (§9-E).
-- [ ] Configure `user-data` (Kairos cloud-init: Palette Edge registration/tenant, network, users).
+- [ ] Configure `.arg` (see `canvos/.arg` — aligned to upstream `.arg.template`):
+  - `OS_DISTRIBUTION=ubuntu` / `OS_VERSION=22.04` (Kairos base)
+  - **`K8S_DISTRIBUTION=rke2`** and **`ARCH=amd64`** (locked)
+  - `IMAGE_REGISTRY` / `IMAGE_REPO` / `CUSTOM_TAG=runai-cert`, `ISO_NAME`
+  - Note: **K8s version is NOT an `.arg` field** — pass it on the build CLI (below); unset builds *every* rke2 version.
+- [ ] Configure `user-data` (Kairos cloud-init: `paletteEndpoint`, `edgeHostToken`, `projectName`, node user — see `canvos/user-data`).
 - [ ] (If air-gapped) stage embedded content bundle — note the project also has `AI-RA-Airgap-Bundle`.
-- [ ] Build: `sudo ./earthly.sh +build-all-images` (provider images + installer ISO).
-- [ ] Push provider images to the registry; record the resulting tags.
+- [ ] Build the certified version only:
+  `./earthly.sh +build-provider-images --K8S_VERSION=1.34.6 --ARCH=amd64` (add `+build-all-images` for the ISO).
+- [ ] Confirm the provider-image tag is **`rke2-1.34.6-runai-cert`** and push to the registry; record it. **Do not use 1.35.x / 1.34.9** — not in Run:ai 2.23 support / not CanvOS-buildable (§9-E).
 - [ ] Register the built provider image as the value of the `edge-native-byoi` OS layer in Palette.
 
 **Exit criteria:** provider image(s) + ISO built, pushed, and referenced by an `edge-native-byoi` pack; build SHA + tags recorded.
@@ -129,7 +130,7 @@ All four Run:ai-related profiles already exist in `ISC-Strategic-Alliance`. Veri
 
 **Locked-decision changes to apply to a cert-specific copy of the profiles:**
 
-- [ ] **Swap the K8s layer** in `AI-RA-Infra-Agent`: replace `edge-k8s` (kubeadm) with **`edge-rke2`** at the pinned 1.34.x tag.
+- [ ] **Swap the K8s layer** in `AI-RA-Infra-Agent`: replace `edge-k8s` (kubeadm) with **`edge-rke2`** at the pinned 1.34.6 tag.
 - [ ] **Add `AI-RA-Core-Nginx`** to the cluster's profile stack (provides IngressClass `nginx`).
 - [ ] **Demote Cilium ingress** in `cni-cilium-oss` values so there is exactly one default IngressClass:
   ```yaml
@@ -303,7 +304,7 @@ the kit's expectations match classic Ingress; if any test assumes Gateway API, e
 Switching `AI-RA-Infra-Agent` from `edge-k8s` (kubeadm) to `edge-rke2` changes the node runtime. Re-verify on
 RKE2: Cilium (`kubeProxyReplacement`) comes up, GPU Operator (driver/toolkit/device-plugin) is healthy,
 Longhorn mounts, and the PodSecurity `privileged` namespace labels (`runai`, `metallb-system`,
-`kgateway-system`) still apply. Confirm the CanvOS-baked RKE2 version == the `edge-rke2` pack tag (**1.34.9**).
+`kgateway-system`) still apply. Confirm the CanvOS-baked RKE2 version == the `edge-rke2` pack tag (**1.34.6**).
 RKE2 defaults to **containerd**, which satisfies the GPU-Operator-25.10 containerd-default requirement (§9-E).
 
 ### 9-E. Run:ai 2.23 support-matrix compliance (verified against NVIDIA docs)
@@ -314,7 +315,7 @@ Checked against our packs:
 
 | Component | Run:ai 2.23 supported | Our pack | Verdict / action |
 |---|---|---|---|
-| **Kubernetes** | **1.31 – 1.34** | RKE2 **1.34.9** | ✅ highest 1.34.x, confirmed available (1.35.x rejected) |
+| **Kubernetes** | **1.31 – 1.34** | RKE2 **1.34.6** | ✅ highest 1.34.x CanvOS builds (1.34.9/1.35.x not buildable) |
 | **Knative Serving** | **1.11 – 1.18** | `knative-operator` **v1.20.0** (installs Serving 1.20) | ❌ **out of range → use `knative-operator` 1.18.1** (installs Serving 1.18) |
 | **Kubeflow Training Operator** | **1.9.2 recommended** | **1.8.1** | ⚠ below recommended → **bump to 1.9.3** (≥ 1.9.2) |
 | **GPU Operator** | **25.3 – 25.10** | `nvidia-gpu-operator-ai` **25.10.1** | ✅ within range (containerd must be default runtime — RKE2 provides it) |
@@ -341,7 +342,7 @@ Checked against our packs:
 | Decision | Choice | Notes |
 |---|---|---|
 | Infra target for cert | ✅ **Edge** (CanvOS/Kairos `AI-RA-Infra-Agent`) | `edge-native-byoi` 2.1.0 OS |
-| K8s distribution | ✅ **RKE2 1.34.9** (`edge-rke2`, `K8S_DISTRIBUTION=rke2`) | highest supported by Run:ai 2.23, confirmed available; CanvOS build == pack tag |
+| K8s distribution | ✅ **RKE2 1.34.6** (`edge-rke2`, `K8S_DISTRIBUTION=rke2`) | highest 1.34.x CanvOS builds, within Run:ai 2.23; CanvOS build == pack tag |
 | Ingress remediation | ✅ **nginx profile** (`AI-RA-Core-Nginx`), demote Cilium ingress | §9-B |
 | DRA driver | ✅ **In scope** (`AI-RA-Core-plus-dra`, `nvidia-dra-driver` 25.8.1) | |
 | Cert-kit architecture | ✅ **amd64** | `certification-kit-amd64`, CanvOS `ARCH=amd64` |
