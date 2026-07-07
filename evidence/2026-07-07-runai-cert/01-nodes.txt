@@ -1,0 +1,2 @@
+NAME                                    STATUS   ROLES                AGE   VERSION          INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+edge-ec28263f33bf0977305518dae410b08e   Ready    control-plane,etcd   13h   v1.34.6+rke2r1   172.31.8.99   <none>        Ubuntu 22.04.5 LTS   6.8.0-124-generic   containerd://2.2.2-k3s1
