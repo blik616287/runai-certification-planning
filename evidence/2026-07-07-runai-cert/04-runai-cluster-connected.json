@@ -1,0 +1,329 @@
+[
+    {
+        "uuid": "6d02bb52-7a9f-40fd-9bb1-3e6b330f724e",
+        "tenantId": 1001,
+        "name": "cert-kit-edge",
+        "createdAt": "2026-07-07T17:28:55.37958Z",
+        "domain": "https://runai.172.31.9.103.nip.io",
+        "version": "2.23.20",
+        "status": {
+            "conditions": [
+                {
+                    "lastTransitionTime": "2026-07-07T20:27:52Z",
+                    "message": "Reconciliation completed successfully",
+                    "observedGeneration": 2,
+                    "reason": "reconciled",
+                    "status": "True",
+                    "type": "Reconciled"
+                },
+                {
+                    "lastTransitionTime": "2026-07-07T19:03:44Z",
+                    "message": "Dependencies are fulfilled",
+                    "observedGeneration": 2,
+                    "reason": "dependencies_fulfilled",
+                    "status": "True",
+                    "type": "DependenciesFulfilled"
+                },
+                {
+                    "lastTransitionTime": "2026-07-07T20:27:52Z",
+                    "message": "Resources Deployed",
+                    "observedGeneration": 2,
+                    "reason": "deployed",
+                    "status": "True",
+                    "type": "Deployed"
+                },
+                {
+                    "lastTransitionTime": "2026-07-07T19:49:35Z",
+                    "message": "System Available",
+                    "observedGeneration": 2,
+                    "reason": "available",
+                    "status": "True",
+                    "type": "Available"
+                }
+            ],
+            "operands": {
+                "accessrule-controller": {
+                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "ready": true
+                },
+                "admission-controller": {
+                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "ready": true
+                },
+                "agent": {
+                    "lastTransitionTime": "2026-07-07T19:48:56Z",
+                    "ready": true
+                },
+                "application-controller": {
+                    "lastTransitionTime": "2026-07-07T19:03:52Z",
+                    "ready": true
+                },
+                "assets-sync": {
+                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "ready": true
+                },
+                "cluster-api": {
+                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "ready": true
+                },
+                "cluster-redis": {
+                    "lastTransitionTime": "2026-07-07T19:49:02Z",
+                    "ready": true
+                },
+                "cluster-sync": {
+                    "lastTransitionTime": "2026-07-07T19:49:00Z",
+                    "ready": true
+                },
+                "encryption-key": {
+                    "lastTransitionTime": "2026-07-07T19:03:46Z",
+                    "ready": true
+                },
+                "engine-operator": {
+                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "ready": true
+                },
+                "external-workload-integrator": {
+                    "lastTransitionTime": "2026-07-07T19:03:50Z",
+                    "ready": true
+                },
+                "inference-workload-controller": {
+                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "ready": true
+                },
+                "init-ca": {
+                    "lastTransitionTime": "2026-07-07T19:48:54Z",
+                    "ready": true
+                },
+                "job-controller": {
+                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "ready": true
+                },
+                "knative": {
+                    "lastTransitionTime": "2026-07-07T19:03:46Z",
+                    "ready": true
+                },
+                "managed-nodes-config": {
+                    "lastTransitionTime": "2026-07-07T19:03:50Z",
+                    "ready": true
+                },
+                "metrics-exporter": {
+                    "lastTransitionTime": "2026-07-07T19:49:13Z",
+                    "ready": true
+                },
+                "mpi-operator": {
+                    "lastTransitionTime": "2026-07-07T19:03:46Z",
+                    "ready": true
+                },
+                "nodepool-controller": {
+                    "lastTransitionTime": "2026-07-07T19:03:50Z",
+                    "ready": true
+                },
+                "pod-group-assigner": {
+                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "ready": true
+                },
+                "project-controller": {
+                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "ready": true
+                },
+                "prometheus": {
+                    "lastTransitionTime": "2026-07-07T19:49:35Z",
+                    "ready": true
+                },
+                "queue-controller": {
+                    "lastTransitionTime": "2026-07-07T19:03:46Z",
+                    "ready": true
+                },
+                "reconciliation-trigger": {
+                    "lastTransitionTime": "2026-07-07T19:03:48Z",
+                    "ready": true
+                },
+                "researcher-service": {
+                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "ready": true
+                },
+                "runai-node-exporter": {
+                    "lastTransitionTime": "2026-07-07T19:03:46Z",
+                    "ready": true
+                },
+                "runai-public": {
+                    "lastTransitionTime": "2026-07-07T19:03:49Z",
+                    "ready": true
+                },
+                "shared-objects-controller": {
+                    "lastTransitionTime": "2026-07-07T19:03:49Z",
+                    "ready": true
+                },
+                "status-updater": {
+                    "lastTransitionTime": "2026-07-07T19:48:56Z",
+                    "ready": true
+                },
+                "templates": {
+                    "lastTransitionTime": "2026-07-07T19:03:49Z",
+                    "ready": true
+                },
+                "training-operator": {
+                    "lastTransitionTime": "2026-07-07T19:03:46Z",
+                    "ready": true
+                },
+                "workload-controller": {
+                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "ready": true
+                },
+                "workload-exporter": {
+                    "lastTransitionTime": "2026-07-07T19:49:02Z",
+                    "ready": true
+                },
+                "workload-overseer": {
+                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "ready": true
+                }
+            },
+            "platform": {
+                "type": "vanilla",
+                "kubeVersion": "v1.34.6+rke2r1"
+            },
+            "config": {
+                "workloadOwnershipProtection": false,
+                "subdomainEnabled": false,
+                "ingressClass": "nginx"
+            },
+            "dependencies": {
+                "required": {
+                    "gpu-stack": {
+                        "available": true,
+                        "components": {
+                            "amd": {
+                                "available": false,
+                                "reason": "daemonset amd-gpu-device-plugin-daemonset not found in the cluster"
+                            },
+                            "nvidia": {
+                                "available": true,
+                                "components": {
+                                    "nvidia-metrics": {
+                                        "available": true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "prometheus": {
+                        "available": true,
+                        "components": {
+                            "Oauth2": {
+                                "available": true
+                            }
+                        }
+                    }
+                },
+                "optional": {
+                    "jax": {
+                        "available": true,
+                        "components": {
+                            "suspend": {
+                                "available": false,
+                                "reason": "deployment training-operator has unknown image tag v1-d6eb98e"
+                            }
+                        }
+                    },
+                    "knative": {
+                        "available": true,
+                        "components": {
+                            "hpa": {
+                                "available": true
+                            },
+                            "knative": {
+                                "available": true,
+                                "components": {
+                                    "enable-scale-to-zero": {
+                                        "available": true
+                                    },
+                                    "kubernetes.podspec-affinity": {
+                                        "available": true
+                                    },
+                                    "kubernetes.podspec-init-containers": {
+                                        "available": true
+                                    },
+                                    "kubernetes.podspec-nodeselector": {
+                                        "available": true
+                                    },
+                                    "kubernetes.podspec-persistent-volume-claim": {
+                                        "available": true
+                                    },
+                                    "kubernetes.podspec-persistent-volume-write": {
+                                        "available": true
+                                    },
+                                    "kubernetes.podspec-schedulername": {
+                                        "available": true
+                                    },
+                                    "kubernetes.podspec-securitycontext": {
+                                        "available": true
+                                    },
+                                    "kubernetes.podspec-tolerations": {
+                                        "available": true
+                                    },
+                                    "kubernetes.podspec-volumes-emptydir": {
+                                        "available": true
+                                    },
+                                    "multi-container": {
+                                        "available": true
+                                    },
+                                    "multi-container-probing": {
+                                        "available": false,
+                                        "reason": "Feature multi-container-probing in knative config-features config-map from knative-serving namespace, has actual value <> expected value <enabled>"
+                                    }
+                                }
+                            },
+                            "kourier": {
+                                "available": true
+                            }
+                        }
+                    },
+                    "lws": {
+                        "available": false,
+                        "reason": "LeaderWorkerSet CRD is not installed in the cluster"
+                    },
+                    "mpi": {
+                        "available": false,
+                        "reason": "Namespace validation failed: mpi operator not found in the cluster",
+                        "components": {
+                            "suspend": {
+                                "available": false
+                            }
+                        }
+                    },
+                    "pytorch": {
+                        "available": true,
+                        "components": {
+                            "suspend": {
+                                "available": false,
+                                "reason": "deployment training-operator has unknown image tag v1-d6eb98e"
+                            }
+                        }
+                    },
+                    "tensorflow": {
+                        "available": true,
+                        "components": {
+                            "suspend": {
+                                "available": false,
+                                "reason": "deployment training-operator has unknown image tag v1-d6eb98e"
+                            }
+                        }
+                    },
+                    "xgboost": {
+                        "available": true,
+                        "components": {
+                            "suspend": {
+                                "available": false,
+                                "reason": "deployment training-operator has unknown image tag v1-d6eb98e"
+                            }
+                        }
+                    }
+                }
+            },
+            "state": "Connected"
+        },
+        "updatedAt": "2026-07-07T17:28:55.37958Z",
+        "lastLiveness": "2026-07-07T20:33:30.316Z"
+    }
+]

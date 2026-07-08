@@ -1,0 +1,18 @@
+### nvidia.com/gpu allocatable
+1
+### GPU test (nvidia-smi via CDI) — Tesla T4 / CUDA verified during pre-flight
+### nvidia driver + toolkit versions (from node)
+580.105 driver | gpu product=Tesla-T4
+### gpu-operator pods
+NAME                                       READY   STATUS             RESTARTS       AGE
+gpu-feature-discovery-p2thq                1/1     Running            0              144m
+gpu-operator-648f788768-cjjf5              1/1     Running            2 (149m ago)   11h
+nvidia-container-toolkit-daemonset-v2zlb   0/1     CrashLoopBackOff   36 (40s ago)   144m
+nvidia-cuda-validator-xs5gq                0/1     Completed          0              142m
+nvidia-dcgm-exporter-jkxcj                 1/1     Running            0              144m
+nvidia-device-plugin-daemonset-fnfhh       1/1     Running            0              144m
+nvidia-driver-daemonset-nv5b6              1/1     Running            2 (149m ago)   11h
+nvidia-operator-validator-2lntm            1/1     Running            0              144m
+### nvidia-dra-driver pods
+NAME                                         READY   STATUS    RESTARTS       AGE
+nvidia-dra-driver-gpu-kubelet-plugin-9qgs4   1/1     Running   1 (149m ago)   11h
