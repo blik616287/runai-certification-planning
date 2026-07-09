@@ -1,0 +1,44 @@
+# GPU — captured Thu Jul  9 22:17:12 UTC 2026
+
+NODE                                    GPU_ALLOC   GPU_CAP
+edge-ec28263f33bf0977305518dae410b08e   1           1
+edge-ec28fc02cffb4f8c326a79e5da0fbcc8   1           1
+
+# GPU operator pods
+gpu-feature-discovery-n8fb5  Running
+gpu-feature-discovery-p2hhj  Running
+gpu-operator-648f788768-vtnth  Running
+nvidia-container-toolkit-daemonset-kfkqj  Running
+nvidia-container-toolkit-daemonset-sglkc  Running
+nvidia-cuda-validator-4gfsw  Completed
+nvidia-cuda-validator-56tdm  Completed
+nvidia-dcgm-exporter-jnbws  Running
+nvidia-dcgm-exporter-vs862  Running
+nvidia-device-plugin-daemonset-nf7hd  Running
+nvidia-device-plugin-daemonset-r7cqh  Running
+nvidia-driver-daemonset-nv5b6  Running
+nvidia-driver-daemonset-z9lf7  Running
+nvidia-operator-validator-hsxm7  Running
+nvidia-operator-validator-v8zhf  Running
+
+# DRA driver pods
+nvidia-dra-driver-gpu-kubelet-plugin-4hqbf  Running
+nvidia-dra-driver-gpu-kubelet-plugin-9qgs4  Running
+
+# CUDA validator ran on both nodes
+nvidia-cuda-validator-4gfsw   edge-ec28fc02cffb4f8c326a79e5da0fbcc8   Succeeded
+nvidia-cuda-validator-56tdm   edge-ec28263f33bf0977305518dae410b08e   Succeeded
+
+# nvidia-smi (node 1)
+Defaulted container "nvidia-device-plugin" out of: nvidia-device-plugin, toolkit-validation (init)
+Thu Jul  9 22:17:15 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.105.08             Driver Version: 580.105.08     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       Off |   00000000:00:1E.0 Off |                    0 |
+| N/A   33C    P8             14W /   70W |       3MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |

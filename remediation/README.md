@@ -17,7 +17,7 @@ Fresh `*-cert` add-on/cluster profiles built from the originals with the edits b
 
 **Deviations / still pending:**
 - **Knative:** kept the operator pack at **v1.20.0** but pinned the `KnativeServing` CR to **`version: "1.18"`** — the CR
-  version is what determines the installed Serving version (≤1.18 satisfies Run:ai 2.23), avoiding a risky operator-pack swap.
+  version is what determines the installed Serving version (deployed: **Serving 1.18.2**), avoiding a risky operator-pack swap.
   (If you prefer the operator itself at 1.18.1: Dreamworx Helm OCI, packUid `690a37eefd3766a7e11520b7`.)
 - **MPI Operator ≥ 0.6.0:** NOT added — no tenant pack exists; must be imported first (item 6 below).
 - Resolved packUids for reference: kubeflow 1.9.3 `69f7f59062348fa4e56a00ce` (reg `64eaff5630402973c4e1856a`),
@@ -27,11 +27,12 @@ Fresh `*-cert` add-on/cluster profiles built from the originals with the edits b
 
 ---
 
-## 1. Swap K8s layer to RKE2 1.34.9
-**Profile:** `AI-RA-Infra-Agent` · **replaces:** `edge-k8s` (kubeadm 1.34.2) → **`edge-rke2` 1.34.9**
+## 1. Swap K8s layer to RKE2 1.34.6
+**Profile:** `AI-RA-Infra-Agent` · **replaces:** `edge-k8s` (kubeadm 1.34.2) → **`edge-rke2` 1.34.6**
 - Remove the `edge-k8s` pack (see `../artifacts/values/AI-RA-Infra-Agent__edge-k8s.values.yaml`).
-- Add `edge-rke2` at tag **1.34.9** (Palette Registry, uid `64eaff453040297344bcad5d`).
-- Provider image from CanvOS must be RKE2 **1.34.9** (see `../canvos/build-notes.md`).
+- Add `edge-rke2` at tag **1.34.6** (Palette Registry, uid `64eaff453040297344bcad5d`).
+- Provider image from CanvOS must be RKE2 **1.34.6** (see `../canvos/build-notes.md`).
+  *(1.34.9 is **not** buildable by CanvOS PE v4.9.21 — earlier drafts of this file said 1.34.9 in error.)*
 
 ## 2. Add nginx ingress + demote Cilium ingress
 **Profiles:** add `AI-RA-Core-Nginx` (ingress-nginx 1.14.3) to the stack; edit `AI-RA-Infra-Agent`.
@@ -73,8 +74,10 @@ Fresh `*-cert` add-on/cluster profiles built from the originals with the edits b
 **Profile:** `AI-RA-RunAI-Cluster` · `kubeflow-training-operator` **1.8.1 → 1.9.3**
 (Palette Community Registry, system scope).
 
-## 6. Add MPI Operator ≥ 0.6.0
-**No tenant pack exists.** Import upstream `kubeflow/mpi-operator` Helm chart (or BYO manifest) into a
+## 6. Add MPI Operator ≥ 0.6.0 — *not added; optional*
+**No tenant pack exists.** The certification ran without it (Run:ai reports `mpi: available: false`);
+no test depends on it. Add only if MPI workloads are required.
+ Import upstream `kubeflow/mpi-operator` Helm chart (or BYO manifest) into a
 governed registry, then add it to `AI-RA-RunAI-Cluster`.
 
 ---
@@ -84,3 +87,26 @@ Present in the saved artifacts (`../artifacts/`), fine for a throwaway lab only:
 - Console `admin@run.ai` / `<REDACTED-ROTATE>`; Postgres `user`/`password`; NATS `<REDACTED-ROTATE>`
 - CA **private key** in `runai-predefined-ca` (backend prereqs) — regenerate per env
 - JFrog puller JWT in `runai-reg-creds` — Run:ai shared cred, treat as exposed
+
+
+---
+
+## Palette: changing a Run:ai pack version (operational notes)
+
+*Relocated here from the evidence package — this is build/operations knowledge, not certification evidence.
+The certified cluster runs Run:ai **2.24.82**.*
+
+- Palette's `packValues.tag` does **not** change a pack version. A **new profile version** is required
+  (`POST /clusterprofiles/{uid}/clone` with `metadata.version`), then swap on the cluster with
+  `PATCH /spectroclusters/{uid}/profiles` → `{"uid":"<NEW>","replaceWithProfile":"<OLD>"}`.
+  Base URL is `https://console.spectrocloud.com`; list endpoints paginate at `limit<=100`.
+- StatefulSet `volumeClaimTemplates` are immutable. Orphan-delete before changing the Run:ai backend version:
+  `kubectl delete sts runai-backend-{postgresql,nats,thanos-receive} -n runai-backend --cascade=orphan`
+  (pods keep running, PVCs and Postgres data untouched; helm recreates the STS and adopts them).
+- Keep `global.storageClass: longhorn` in the backend values. The key is absent from 2.24.82's `values.yaml`
+  defaults, but the chart templates still honor it; removing it renders the StatefulSets without a storage
+  class, which collides with the immutable `volumeClaimTemplates`.
+- After a version change, `runai-container-toolkit` waits on `/run/nvidia/validations/cuda-ready` (written by
+  NVIDIA's `nvidia-operator-validator`). Restart the validator per node if the marker is absent.
+- A lingering `ServiceIssues` condition is usually a stale `runaiconfig` reconcile; restart `engine-operator`
+  and `runai-operator`.

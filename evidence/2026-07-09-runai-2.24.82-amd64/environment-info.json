@@ -1,0 +1,8 @@
+{
+  "execution_date": "2026-07-09T22:12:53Z",
+  "cluster_name": "cert-kit",
+  "control_plane_url": "https://runai.172.31.9.103.nip.io",
+  "kubernetes_platform": "k8s",
+  "test_environment": "certification-kit",
+  "package_version": "1.0"
+}

@@ -5,7 +5,8 @@ published as the `edge-native-byoi` OS layer for the `AI-RA-Infra-Agent` profile
 Validated against upstream CanvOS `PE_VERSION v4.9.21`.
 
 ## Version reconciliation (important)
-- Run:ai 2.23 supports Kubernetes **1.31–1.34**.
+- Run:ai 2.23 supports Kubernetes **1.31–1.34** (the range this pin was derived from).
+  The cluster was ultimately certified on **Run:ai 2.24.82**; RKE2 **1.34.6** remained the pinned version.
 - CanvOS (public, PE v4.9.21) can build **rke2** `1.34.2 / 1.34.5 / 1.34.6` in the 1.34 line — **no 1.34.9**.
 - Therefore the certified K8s version is **RKE2 1.34.6** (highest 1.34.x buildable + in-support).
 - The `edge-rke2` **pack tag must equal 1.34.6** and match the CanvOS provider-image tag.
@@ -15,6 +16,7 @@ Validated against upstream CanvOS `PE_VERSION v4.9.21`.
    ```bash
    git clone https://github.com/spectrocloud/CanvOS.git && cd CanvOS
    git checkout <tag>            # record: git rev-parse HEAD
+   # as certified: PE_VERSION v4.9.21, commit 88f2ede
    ```
 2. Copy `.arg` and `user-data` from this folder into the CanvOS root; fill placeholders
    (`IMAGE_REGISTRY`, edge registration token, `projectName`/`projectUid`, SSH/QR as needed).
@@ -35,7 +37,7 @@ Validated against upstream CanvOS `PE_VERSION v4.9.21`.
 - **Do not use 1.35.x** (outside Run:ai 2.23 support) or 1.34.9 (not buildable by CanvOS).
 
 ## Record for evidence (Phase 7, item #4)
-- CanvOS commit SHA + PE_VERSION
+- CanvOS commit SHA + PE_VERSION — **as certified: commit `88f2ede`, PE `v4.9.21`**
 - `.arg` contents (as built)
 - Provider image registry + tag (`rke2-1.34.6-runai-cert`)
 - Installer ISO name/checksum
