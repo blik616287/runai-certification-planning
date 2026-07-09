@@ -1,0 +1,43 @@
+# Workloads / storage / ingress — captured Thu Jul  9 22:17:15 UTC 2026
+
+## pods NOT Running/Completed (cluster-wide)
+(count: 0)
+
+## StorageClasses
+NAME              PROVISIONER          IS_DEFAULT_CLASS   REPLICAS
+longhorn          driver.longhorn.io   true               2
+longhorn-static   driver.longhorn.io   <none>             <none>
+standard          driver.longhorn.io   false              2
+
+## PVCs
+NAMESPACE       NAME                                  STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+runai-backend   data-runai-backend-nats-0             Bound    pvc-e06f8c16-223a-4aca-8cf5-f9ef9685e3c1   3Gi        RWO            longhorn       <unset>                 2d12h
+runai-backend   data-runai-backend-nats-1             Bound    pvc-c8f2e58f-66af-457a-b10c-eff357fb42a4   3Gi        RWO            longhorn       <unset>                 2d12h
+runai-backend   data-runai-backend-nats-2             Bound    pvc-81437ff0-8932-448c-b2bc-0a910adbca2f   3Gi        RWO            longhorn       <unset>                 2d12h
+runai-backend   data-runai-backend-postgresql-0       Bound    pvc-93307789-cbd3-45e3-b535-377996f13bbb   8Gi        RWO            longhorn       <unset>                 2d12h
+runai-backend   data-runai-backend-thanos-receive-0   Bound    pvc-bd047cfc-7f34-4169-8454-6e47a0967ff4   100Gi      RWO            longhorn       <unset>                 2d12h
+
+## Longhorn volumes
+NAME                                       STATE      ROBUSTNESS   REPLICAS
+pvc-81437ff0-8932-448c-b2bc-0a910adbca2f   attached   healthy      2
+pvc-93307789-cbd3-45e3-b535-377996f13bbb   attached   healthy      2
+pvc-bd047cfc-7f34-4169-8454-6e47a0967ff4   attached   healthy      2
+pvc-c8f2e58f-66af-457a-b10c-eff357fb42a4   attached   healthy      2
+pvc-e06f8c16-223a-4aca-8cf5-f9ef9685e3c1   attached   healthy      2
+
+## Longhorn replica placement (2 per volume, one per node)
+pvc-81437ff0-8932-448c-b2bc-0a910adbca2f   edge-ec28263f33bf0977305518dae410b08e   running
+pvc-81437ff0-8932-448c-b2bc-0a910adbca2f   edge-ec28fc02cffb4f8c326a79e5da0fbcc8   running
+pvc-93307789-cbd3-45e3-b535-377996f13bbb   edge-ec28263f33bf0977305518dae410b08e   running
+pvc-93307789-cbd3-45e3-b535-377996f13bbb   edge-ec28fc02cffb4f8c326a79e5da0fbcc8   running
+pvc-bd047cfc-7f34-4169-8454-6e47a0967ff4   edge-ec28263f33bf0977305518dae410b08e   running
+pvc-bd047cfc-7f34-4169-8454-6e47a0967ff4   edge-ec28fc02cffb4f8c326a79e5da0fbcc8   running
+pvc-c8f2e58f-66af-457a-b10c-eff357fb42a4   edge-ec28263f33bf0977305518dae410b08e   running
+pvc-c8f2e58f-66af-457a-b10c-eff357fb42a4   edge-ec28fc02cffb4f8c326a79e5da0fbcc8   running
+pvc-e06f8c16-223a-4aca-8cf5-f9ef9685e3c1   edge-ec28263f33bf0977305518dae410b08e   running
+pvc-e06f8c16-223a-4aca-8cf5-f9ef9685e3c1   edge-ec28fc02cffb4f8c326a79e5da0fbcc8   running
+
+## IngressClasses (exactly one default)
+NAME     IS_DEFAULT_CLASS
+cilium   <none>
+nginx    true

@@ -11,3 +11,31 @@ artifacts/
 
 # scratch
 .print-tmp.html
+
+# Evidence artifacts that carry live credentials or bearer tokens.
+# These ARE part of the deliverable emailed to NVIDIA, but must never be committed
+# to this PUBLIC repo:
+#   *.tar.gz  -> runai debug collector (runaiconfig: agent/workloads secrets, JFrog dockerConfigJson)
+#   *.zip     -> kit results archive (Allure attachments embed Bearer JWTs)
+#   *.log     -> kit run/console logs (embed Bearer JWTs)
+evidence/**/*.tar.gz
+evidence/**/*.zip
+evidence/**/certification-kit-run.log
+evidence/**/certification-kit-console.log
+
+# NVIDIA's certification kit images — proprietary, do not redistribute
+certification-kit-amd64.tar.gz
+runai-certification-kit.tar.gz
+
+# Cluster profile exports contain LIVE credentials in pack values
+# (Run:ai console admin password, Postgres/Redis/pubsub passwords).
+# They ARE part of the package emailed to NVIDIA, but must never be committed here.
+evidence/**/profiles/
+
+# The Palette spectrocluster status embeds the same pack values (and therefore the same
+# live credentials) as the profile exports. Part of the emailed package; never committed.
+evidence/**/07-palette-cluster-status.json
+
+# Claude Code local settings + its atomic-write temp files
+.claude/settings.local.json
+.claude/*.tmp.*

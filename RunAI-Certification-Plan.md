@@ -3,7 +3,38 @@
 **Program:** NVIDIA Run:ai Self-Certification Program (Guidelines for Kubernetes Distributions, v1.3)
 **Distribution under test:** Palette Edge — CanvOS / Kairos immutable OS + **RKE2** (`edge-rke2`, "Palette Optimized RKE2")
 **Palette project:** `ISC-Strategic-Alliance` (uid `68e6a683b6b66c6045d1b584`)
-**Owner:** _<fill in>_ · **Target completion:** _<fill in>_ · **Status:** Draft
+**Owner:** _<fill in>_ · **Status:** ✅ **COMPLETED 2026-07-09**
+
+> ## Outcome — what was actually certified
+>
+> **Run:ai 2.24.82** × **RKE2 v1.34.6+rke2r1** × **CanvOS/Kairos** (PE `v4.9.21`, commit `88f2ede`)
+> **141 tests · 139 passed · 2 failed · 0 broken · 0 skipped — 0 failures attributable to the distribution.**
+> Executed at the certification kit's default parallelism (5 workers) and default timeouts.
+> Evidence: [`evidence/2026-07-09-runai-2.24.82-amd64/`](evidence/2026-07-09-runai-2.24.82-amd64/)
+>
+> **This plan was written against Run:ai 2.23.20.** Mid-effort the target moved to **2.24.82** because the
+> certification kit targets 2.24 (its `SupportedVersions` enum maxes at `V2_24`, and it calls
+> `/api/v1/access-keys`, which 2.23.20 does not serve). Every "Run:ai 2.23" support-matrix range below was
+> correct **for 2.23** and has **not** been re-derived for 2.24 — treat those ranges as historical.
+> The versions that actually passed on 2.24.82: **Knative Serving 1.18.2 · Kubeflow Training Operator 1.9.3 ·
+> GPU Operator 25.10.1 · DRA driver 25.8.1 · RKE2 1.34.6 · Longhorn 1.10.1 · MetalLB 0.15.2 ·
+> ingress-nginx 1.14.3 · containerd 2.2.2-k3s1 · Ubuntu 22.04.5 · driver 580.105.08 / CUDA 13.0**.
+>
+> **Deviations from this plan, as executed:**
+> - Knative operator pack was **kept at v1.20.0**; the `KnativeServing` CR was pinned to `version: "1.18"`,
+>   which deployed **Serving 1.18.2**. The operator was *not* downgraded to 1.18.1.
+> - **MPI Operator was not installed.** It is optional; no certification test depends on it.
+> - **GPU Operator on RKE2 required explicit toolkit overrides** (see §9-E note and the remediation record):
+>   `CONTAINERD_SOCKET=/run/k3s/containerd/containerd.sock`,
+>   `CONTAINERD_CONFIG=/var/lib/rancher/rke2/agent/etc/containerd/config.toml`,
+>   `CONTAINERD_RUNTIME_CLASS=nvidia`, `CONTAINERD_SET_AS_DEFAULT="false"`.
+>   Setting `SET_AS_DEFAULT=true` corrupts the default `runc` runtime and breaks every pod.
+> - **`max-pods=250`** must be set via a kubelet argument (`edge-rke2` pack's `kubelet-arg` for fresh deploys;
+>   a `/etc/rancher/rke2/config.yaml.d/` drop-in on a running cluster). The `maxPods` field in
+>   `edge-native-byoi` is a **no-op on RKE2**.
+> - **Root disk ≥ 160 GB** required (80 GB yields only ~55 G `COS_PERSISTENT` → DiskPressure).
+> - The cluster must expose a StorageClass literally named **`standard`** (hardcoded by the kit), and
+>   Longhorn is the default StorageClass only via a **live patch** (`csi-longhorn` ships `defaultClass: false`).
 
 **Locked decisions:** (1) **Edge** deployment (CanvOS/Kairos, `AI-RA-Infra-Agent`) · (2) **RKE2 1.34.6** K8s engine (`edge-rke2`) — highest 1.34.x CanvOS builds, within Run:ai 2.23 · (3) **nginx** ingress (`AI-RA-Core-Nginx`), Cilium ingress demoted · (4) **DRA in scope** (`AI-RA-Core-plus-dra`) · (5) **amd64** cert kit.
 
@@ -22,9 +53,9 @@ This run pins:
 
 | Axis | Value | Source pack |
 |---|---|---|
-| **Run:ai version** | **2.23.20** | `runai-backend/control-plane`, `runai-cluster` |
-| **Kubernetes version** | **RKE2 1.34.6** (`v1.34.6+rke2rN`) | **`edge-rke2`** ("Palette Optimized RKE2") |
-| **Distribution version** | **CanvOS build `<tag>`** (Kairos + `edge-native-byoi` 2.1.0, engine `rke2` 1.34.6) | CanvOS output |
+| **Run:ai version** | **2.24.82** (plan originally targeted 2.23.20 — see Outcome banner) | `runai-backend/control-plane`, `runai-cluster` |
+| **Kubernetes version** | **RKE2 1.34.6** (`v1.34.6+rke2r1`) | **`edge-rke2`** ("Palette Optimized RKE2") |
+| **Distribution version** | **CanvOS PE `v4.9.21`, commit `88f2ede`** (Kairos + `edge-native-byoi` 2.1.0, engine `rke2` 1.34.6) | CanvOS output |
 
 > **RKE2 version note — bounded by Run:ai, not the PDF.** The program doc pins no K8s version, but **Run:ai
 > cluster 2.23 officially supports Kubernetes 1.31–1.34** ([docs](https://run-ai-docs.nvidia.com/self-hosted/2.23/getting-started/installation/install-using-helm/system-requirements)).
@@ -45,12 +76,12 @@ This run pins:
 | CNI | Cilium 1.18.4 (**ingressController demoted — not default**) | `cni-cilium-oss` | AI-RA-Infra-Agent |
 | **Ingress** | **ingress-nginx 1.14.3 (default IngressClass `nginx`)** | **`nginx`** | **AI-RA-Core-Nginx** |
 | CSI | Longhorn 1.10.1 | `csi-longhorn` | AI-RA-Infra-Agent |
-| Load balancer | MetalLB 0.15.3 (L2) | `lb-metallb-helm` | AI-RA-Core-plus-dra |
+| Load balancer | MetalLB 0.15.2 (L2) | `lb-metallb-helm` | AI-RA-Core-plus-dra |
 | GPU stack | NVIDIA GPU Operator 25.10.1 **+ DRA driver 25.8.1 (in scope)** | `nvidia-gpu-operator-ai`, `nvidia-dra-driver` | **AI-RA-Core-plus-dra** |
 | NW operator | 25.10.0 | `network-operator` | AI-RA-Infra-Agent |
-| Serving | Knative Operator v1.20.0 → **1.18.1 (Serving ≤ 1.18)** (§9-E) | `knative-operator` | AI-RA-RunAI-Cluster |
+| Serving | Knative Operator **kept v1.20.0**; `KnativeServing` CR pinned `"1.18"` → **Serving 1.18.2** (§9-E) | `knative-operator` | AI-RA-RunAI-Cluster |
 | Training | Kubeflow Training Operator 1.8.1 → **1.9.3** (§9-E) | `kubeflow-training-operator` | AI-RA-RunAI-Cluster |
-| Distributed (MPI) | **MPI Operator ≥ 0.6.0** (recommended by Run:ai 2.23) — **import, no tenant pack** | `mpi-operator` (upstream Helm/manifest) | AI-RA-RunAI-Cluster |
+| Distributed (MPI) | **Not installed** (optional; no cert test depends on it) | `mpi-operator` (upstream Helm/manifest) | AI-RA-RunAI-Cluster |
 
 ---
 
@@ -125,8 +156,8 @@ All four Run:ai-related profiles already exist in `ISC-Strategic-Alliance`. Veri
 | `AI-RA-Infra-Agent` (edge-native) | `699443bb4b0c78223c52b3fc` | OS + K8s + CNI + CSI foundation |
 | `AI-RA-Core` (or `AI-RA-Core-plus-dra`) | `69b3451a…` / `69aef683…` | GPU Operator, MetalLB, monitoring, kgateway |
 | **`AI-RA-Core-Nginx`** | **`69b2c9f66ca934e285984ff1`** | **ingress-nginx 1.14.3 controller (ingress path)** |
-| `AI-RA-RunAI-Backend` | `69021f0fcc2f1279d4678716` | Run:ai **control plane** (v2.23.20) |
-| `AI-RA-RunAI-Cluster` | `691f2178e890dd070c262158` | Run:ai **cluster** engine + Knative + Kubeflow (v2.23.20) |
+| `AI-RA-RunAI-Backend` | `69021f0fcc2f1279d4678716` | Run:ai **control plane** (base; cert profile ran **v2.24.82**) |
+| `AI-RA-RunAI-Cluster` | `691f2178e890dd070c262158` | Run:ai **cluster** engine + Knative + Kubeflow (base; cert profile ran **v2.24.82**) |
 
 **Locked-decision changes to apply to a cert-specific copy of the profiles:**
 
@@ -305,7 +336,7 @@ Switching `AI-RA-Infra-Agent` from `edge-k8s` (kubeadm) to `edge-rke2` changes t
 RKE2: Cilium (`kubeProxyReplacement`) comes up, GPU Operator (driver/toolkit/device-plugin) is healthy,
 Longhorn mounts, and the PodSecurity `privileged` namespace labels (`runai`, `metallb-system`,
 `kgateway-system`) still apply. Confirm the CanvOS-baked RKE2 version == the `edge-rke2` pack tag (**1.34.6**).
-RKE2 defaults to **containerd**, which satisfies the GPU-Operator-25.10 containerd-default requirement (§9-E).
+RKE2 defaults to **containerd**. ⚠️ This is *necessary but not sufficient*: GPU Operator 25.10.1 also needs explicit toolkit env overrides on RKE2 (`CONTAINERD_SOCKET`, `CONTAINERD_CONFIG`, `CONTAINERD_RUNTIME_CLASS=nvidia`, `CONTAINERD_SET_AS_DEFAULT="false"`) — see the Outcome banner and `evidence/.../08-remediation-record.md` §1.
 
 ### 9-E. Run:ai 2.23 support-matrix compliance (verified against NVIDIA docs)
 
@@ -316,10 +347,10 @@ Checked against our packs:
 | Component | Run:ai 2.23 supported | Our pack | Verdict / action |
 |---|---|---|---|
 | **Kubernetes** | **1.31 – 1.34** | RKE2 **1.34.6** | ✅ highest 1.34.x CanvOS builds (1.34.9/1.35.x not buildable) |
-| **Knative Serving** | **1.11 – 1.18** | `knative-operator` **v1.20.0** (installs Serving 1.20) | ❌ **out of range → use `knative-operator` 1.18.1** (installs Serving 1.18) |
+| **Knative Serving** | **1.11 – 1.18** | `knative-operator` **v1.20.0** (installs Serving 1.20) | ❌ out of range → *plan said* use `knative-operator` 1.18.1. **· AS EXECUTED:** kept operator **v1.20.0**, pinned `KnativeServing` CR `version: "1.18"` → **Serving 1.18.2** ✅ |
 | **Kubeflow Training Operator** | **1.9.2 recommended** | **1.8.1** | ⚠ below recommended → **bump to 1.9.3** (≥ 1.9.2) |
 | **GPU Operator** | **25.3 – 25.10** | `nvidia-gpu-operator-ai` **25.10.1** | ✅ within range (containerd must be default runtime — RKE2 provides it) |
-| **MPI Operator** | **0.6.0+ recommended** | not in profile / **no tenant pack** | ➕ **add** `mpi-operator` ≥ 0.6.0 — import upstream `kubeflow/mpi-operator` Helm chart (or BYO manifest) into a governed registry, then add to the profile |
+| **MPI Operator** | **0.6.0+ recommended** | not in profile / **no tenant pack** | ➕ *plan said* add `mpi-operator` ≥ 0.6.0. **· AS EXECUTED:** **not installed** — optional, no certification test depends on it; cert passed without it |
 
 **Confirmed available in the tenant (registry latest tags):**
 
@@ -328,9 +359,9 @@ Checked against our packs:
 | Knative | `knative-operator` **1.18.1** | *Dreamworx Helm OCI* (tenant) | only ≤1.18 source found; the *knative* registry is at v1.22.2. ⚠ tenant/personal registry — consider importing 1.18.1 into a governed registry for a cert-grade profile |
 | Kubeflow | `kubeflow-training-operator` **1.9.3** | *Palette Community Registry* (**system**) | preferred over the tenant *Kevin OCI* 1.9.3 |
 
-- [ ] Repoint `knative-operator` in `AI-RA-RunAI-Cluster` from v1.20.0 → **1.18.1** (Dreamworx Helm OCI, or import to a governed registry). Alt: keep operator but pin `KnativeServing` CR `spec.version` ≤ 1.18.
+- [x] ~~Repoint `knative-operator` v1.20.0 → 1.18.1~~ → **took the alternative:** kept the operator at v1.20.0 and pinned the `KnativeServing` CR `spec.version: "1.18"`. Deployed **Serving 1.18.2**.
 - [ ] Bump `kubeflow-training-operator` 1.8.1 → **1.9.3** (Palette Community Registry, system scope).
-- [ ] Add `mpi-operator` ≥ 0.6.0 to `AI-RA-RunAI-Cluster` — **no tenant pack exists**; import the upstream `kubeflow/mpi-operator` Helm chart (or BYO manifest) into a governed registry and add it as a pack.
+- [x] ~~Add `mpi-operator` ≥ 0.6.0~~ → **not done, and not required.** No tenant pack exists; the certification suite has no MPI-dependent test and passed without it (Run:ai reports `mpi: available: false`).
 - [ ] Confirm containerd is the default runtime (RKE2 default — verify GPU Operator picks it up).
 
 ---
@@ -351,9 +382,9 @@ Checked against our packs:
 
 | Decision | Action | Owner | Due |
 |---|---|---|---|
-| Knative Serving version | `knative-operator` v1.20.0 → **1.18.1** (Dreamworx Helm OCI; ideally import to a governed registry) | | |
+| Knative Serving version | *plan:* `knative-operator` v1.20.0 → 1.18.1. **As executed:** operator kept at v1.20.0, CR pinned `"1.18"` → **Serving 1.18.2** | | |
 | Kubeflow Training Operator | bump 1.8.1 → **1.9.3** (Palette Community Registry) | | |
-| MPI Operator | add `mpi-operator` ≥ 0.6.0 — import upstream chart (no tenant pack) | | |
+| MPI Operator | *plan:* add ≥ 0.6.0. **As executed:** not installed (optional; no cert test depends on it) | | |
 
 ## 11. Reference
 

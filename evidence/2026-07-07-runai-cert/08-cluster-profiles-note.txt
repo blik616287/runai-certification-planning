@@ -1,2 +1,0 @@
-Cert cluster-profile JSON exports are in ../../artifacts/profiles/ (5 profiles). Live pack status in 07-palette-cluster-status.json.
-profile exports: 5 files in artifacts/profiles/

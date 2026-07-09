@@ -1,0 +1,15 @@
+# Nodes — captured Thu Jul  9 22:17:11 UTC 2026 (post-certification, kit-defaults run)
+
+NAME                                    STATUS   ROLES                AGE     VERSION          INTERNAL-IP    EXTERNAL-IP    OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+edge-ec28263f33bf0977305518dae410b08e   Ready    control-plane,etcd   2d15h   v1.34.6+rke2r1   172.31.8.99    <none>         Ubuntu 22.04.5 LTS   6.8.0-124-generic   containerd://2.2.2-k3s1
+edge-ec28fc02cffb4f8c326a79e5da0fbcc8   Ready    <none>               27h     v1.34.6+rke2r1   172.31.2.254   172.31.2.254   Ubuntu 22.04.5 LTS   6.8.0-124-generic   containerd://2.2.2-k3s1
+
+# max-pods / allocatable
+NODE                                    MAXPODS   CPU   MEM
+edge-ec28263f33bf0977305518dae410b08e   250       32    130484564Ki
+edge-ec28fc02cffb4f8c326a79e5da0fbcc8   250       8     32483972Ki
+
+# kubelet / runtime
+NODE                                    KUBELET          RUNTIME                   OS                   KERNEL
+edge-ec28263f33bf0977305518dae410b08e   v1.34.6+rke2r1   containerd://2.2.2-k3s1   Ubuntu 22.04.5 LTS   6.8.0-124-generic
+edge-ec28fc02cffb4f8c326a79e5da0fbcc8   v1.34.6+rke2r1   containerd://2.2.2-k3s1   Ubuntu 22.04.5 LTS   6.8.0-124-generic

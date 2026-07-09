@@ -1,0 +1,31 @@
+# Config-map asset: the control plane's view is populated ASYNCHRONOUSLY by cluster-sync
+# Cluster: Run:ai 2.24.82 / RKE2 v1.34.6+rke2r1.   Captured Thu Jul  9 21:22:50 UTC 2026
+#
+# cluster-sync only propagates ConfigMaps labelled run.ai/resource=resource. We exploit that
+# to hold propagation deterministically while the ConfigMap provably exists in Kubernetes.
+
+STEP 1 — create the ConfigMap in Kubernetes, WITHOUT the label (propagation withheld)
+  create ConfigMap -> HTTP 201
+  kubectl: configmap/cm-demo-6785 EXISTS in Kubernetes
+
+STEP 2 — POST the config-map asset (what the kit's test does)
+  -> HTTP 400 : config map resource 'cm-demo-6785' of project scope could not be found in the cluster
+  ^ the ConfigMap exists in Kubernetes, yet the control plane rejects it.
+
+STEP 3 — add the label; cluster-sync now propagates it
+  labelled run.ai/resource=resource
+  2026-07-09T21:22:51.269Z	[34mINFO[0m	handlers/config_map_handler.go:50	Adding ConfigMap <Name: cm-demo-6785, Namespace: runai-raceproof>
+  2026-07-09T21:22:51.277Z	[34mINFO[0m	backend-client/backend_client.go:239	Added ConfigMap runai-raceproof:cm-demo-6785 successfully.
+
+STEP 4 — POST the SAME asset again; nothing about Kubernetes changed except propagation
+  -> HTTP 202  (200/202 = accepted)
+
+MEASURED PROPAGATION LATENCY (idle cluster, kit-identical labelled create):
+  cluster-sync 'Adding ConfigMap' -> 'Added ... successfully' = 10-40 ms
+  observed during the certification run under load             = 84 ms
+
+CONCLUSION: the control plane accepts the asset only after cluster-sync has propagated the
+ConfigMap. Acceptance is NOT a function of the ConfigMap existing in Kubernetes. A test that
+creates the ConfigMap and POSTs the asset in the same instant races that propagation; with
+retries:0 on the serial suite, losing the race once is a permanent failure. This is a property
+of the certification kit and the Run:ai control plane, not of the Kubernetes distribution.

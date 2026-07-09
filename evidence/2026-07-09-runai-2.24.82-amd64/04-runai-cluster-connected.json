@@ -5,37 +5,37 @@
         "name": "cert-kit-edge",
         "createdAt": "2026-07-07T17:28:55.37958Z",
         "domain": "https://runai.172.31.9.103.nip.io",
-        "version": "2.23.20",
+        "version": "2.24.82",
         "status": {
             "conditions": [
                 {
-                    "lastTransitionTime": "2026-07-07T20:27:52Z",
+                    "lastTransitionTime": "2026-07-09T22:03:58Z",
                     "message": "Reconciliation completed successfully",
-                    "observedGeneration": 2,
+                    "observedGeneration": 19,
                     "reason": "reconciled",
                     "status": "True",
                     "type": "Reconciled"
                 },
                 {
-                    "lastTransitionTime": "2026-07-07T19:03:44Z",
+                    "lastTransitionTime": "2026-07-09T22:03:58Z",
                     "message": "Dependencies are fulfilled",
-                    "observedGeneration": 2,
+                    "observedGeneration": 19,
                     "reason": "dependencies_fulfilled",
                     "status": "True",
                     "type": "DependenciesFulfilled"
                 },
                 {
-                    "lastTransitionTime": "2026-07-07T20:27:52Z",
+                    "lastTransitionTime": "2026-07-09T22:03:58Z",
                     "message": "Resources Deployed",
-                    "observedGeneration": 2,
+                    "observedGeneration": 19,
                     "reason": "deployed",
                     "status": "True",
                     "type": "Deployed"
                 },
                 {
-                    "lastTransitionTime": "2026-07-07T19:49:35Z",
+                    "lastTransitionTime": "2026-07-09T22:03:58Z",
                     "message": "System Available",
-                    "observedGeneration": 2,
+                    "observedGeneration": 19,
                     "reason": "available",
                     "status": "True",
                     "type": "Available"
@@ -43,19 +43,23 @@
             ],
             "operands": {
                 "accessrule-controller": {
-                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "lastTransitionTime": "2026-07-08T19:55:20Z",
                     "ready": true
                 },
                 "admission-controller": {
-                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "lastTransitionTime": "2026-07-08T19:55:19Z",
                     "ready": true
                 },
                 "agent": {
-                    "lastTransitionTime": "2026-07-07T19:48:56Z",
+                    "lastTransitionTime": "2026-07-09T04:57:07Z",
+                    "ready": true
+                },
+                "anyworkload-controller": {
+                    "lastTransitionTime": "2026-07-09T01:34:06Z",
                     "ready": true
                 },
                 "application-controller": {
-                    "lastTransitionTime": "2026-07-07T19:03:52Z",
+                    "lastTransitionTime": "2026-07-08T07:14:06Z",
                     "ready": true
                 },
                 "assets-sync": {
@@ -63,15 +67,15 @@
                     "ready": true
                 },
                 "cluster-api": {
-                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "lastTransitionTime": "2026-07-09T04:57:08Z",
                     "ready": true
                 },
                 "cluster-redis": {
-                    "lastTransitionTime": "2026-07-07T19:49:02Z",
+                    "lastTransitionTime": "2026-07-08T08:19:14Z",
                     "ready": true
                 },
                 "cluster-sync": {
-                    "lastTransitionTime": "2026-07-07T19:49:00Z",
+                    "lastTransitionTime": "2026-07-09T21:20:18Z",
                     "ready": true
                 },
                 "encryption-key": {
@@ -79,7 +83,7 @@
                     "ready": true
                 },
                 "engine-operator": {
-                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "lastTransitionTime": "2026-07-09T04:59:56Z",
                     "ready": true
                 },
                 "external-workload-integrator": {
@@ -87,15 +91,15 @@
                     "ready": true
                 },
                 "inference-workload-controller": {
-                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "lastTransitionTime": "2026-07-08T19:55:19Z",
                     "ready": true
                 },
                 "init-ca": {
-                    "lastTransitionTime": "2026-07-07T19:48:54Z",
+                    "lastTransitionTime": "2026-07-09T01:33:54Z",
                     "ready": true
                 },
                 "job-controller": {
-                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "lastTransitionTime": "2026-07-08T19:55:16Z",
                     "ready": true
                 },
                 "knative": {
@@ -107,7 +111,7 @@
                     "ready": true
                 },
                 "metrics-exporter": {
-                    "lastTransitionTime": "2026-07-07T19:49:13Z",
+                    "lastTransitionTime": "2026-07-08T08:19:13Z",
                     "ready": true
                 },
                 "mpi-operator": {
@@ -119,15 +123,15 @@
                     "ready": true
                 },
                 "pod-group-assigner": {
-                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "lastTransitionTime": "2026-07-08T19:55:20Z",
                     "ready": true
                 },
                 "project-controller": {
-                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "lastTransitionTime": "2026-07-08T19:55:20Z",
                     "ready": true
                 },
                 "prometheus": {
-                    "lastTransitionTime": "2026-07-07T19:49:35Z",
+                    "lastTransitionTime": "2026-07-09T04:56:37Z",
                     "ready": true
                 },
                 "queue-controller": {
@@ -139,7 +143,7 @@
                     "ready": true
                 },
                 "researcher-service": {
-                    "lastTransitionTime": "2026-07-07T19:49:24Z",
+                    "lastTransitionTime": "2026-07-09T04:57:08Z",
                     "ready": true
                 },
                 "runai-node-exporter": {
@@ -155,7 +159,7 @@
                     "ready": true
                 },
                 "status-updater": {
-                    "lastTransitionTime": "2026-07-07T19:48:56Z",
+                    "lastTransitionTime": "2026-07-08T08:19:18Z",
                     "ready": true
                 },
                 "templates": {
@@ -167,7 +171,7 @@
                     "ready": true
                 },
                 "workload-controller": {
-                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "lastTransitionTime": "2026-07-09T04:55:24Z",
                     "ready": true
                 },
                 "workload-exporter": {
@@ -175,7 +179,7 @@
                     "ready": true
                 },
                 "workload-overseer": {
-                    "lastTransitionTime": "2026-07-07T19:49:12Z",
+                    "lastTransitionTime": "2026-07-08T07:13:34Z",
                     "ready": true
                 }
             },
@@ -221,8 +225,7 @@
                         "available": true,
                         "components": {
                             "suspend": {
-                                "available": false,
-                                "reason": "deployment training-operator has unknown image tag v1-d6eb98e"
+                                "available": true
                             }
                         }
                     },
@@ -275,7 +278,13 @@
                                 }
                             },
                             "kourier": {
-                                "available": true
+                                "available": true,
+                                "components": {
+                                    "external-config-domain": {
+                                        "available": false,
+                                        "reason": "Domain configuration is empty - external access may not work properly"
+                                    }
+                                }
                             }
                         }
                     },
@@ -296,8 +305,7 @@
                         "available": true,
                         "components": {
                             "suspend": {
-                                "available": false,
-                                "reason": "deployment training-operator has unknown image tag v1-d6eb98e"
+                                "available": true
                             }
                         }
                     },
@@ -305,8 +313,7 @@
                         "available": true,
                         "components": {
                             "suspend": {
-                                "available": false,
-                                "reason": "deployment training-operator has unknown image tag v1-d6eb98e"
+                                "available": true
                             }
                         }
                     },
@@ -314,8 +321,7 @@
                         "available": true,
                         "components": {
                             "suspend": {
-                                "available": false,
-                                "reason": "deployment training-operator has unknown image tag v1-d6eb98e"
+                                "available": true
                             }
                         }
                     }
@@ -324,6 +330,6 @@
             "state": "Connected"
         },
         "updatedAt": "2026-07-07T17:28:55.37958Z",
-        "lastLiveness": "2026-07-07T20:33:30.316Z"
+        "lastLiveness": "2026-07-09T22:17:19.395Z"
     }
 ]
